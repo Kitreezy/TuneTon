@@ -13,8 +13,8 @@ enum R {
         static let active = UIColor(hexString: "AF47D2")
         static let inactive = UIColor(hexString: "0E46A3")
         
-        static let background = UIColor(hexString: "151515")
-        static let separator = UIColor(hexString: "141E46")
+        static let background = UIColor(hexString: "F8F9F9")
+        static let separator = UIColor(hexString: "E8ECEF")
         
         static let titleGray = UIColor(hexString: "#545C77")
     }

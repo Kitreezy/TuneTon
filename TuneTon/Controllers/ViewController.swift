@@ -1,5 +1,5 @@
 //
-//  SearchViewController.swift
+//  ViewController.swift
 //  TuneTon
 //
 //  Created by Artem Rodionov on 29.05.2024.
@@ -7,14 +7,12 @@
 
 import UIKit
 
-// UITabelViewController
-class SearchViewController: BaseController {
+class ViewController: BaseController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(hexString: "151515")
+        view.backgroundColor = .clear
     }
 }
-
 
