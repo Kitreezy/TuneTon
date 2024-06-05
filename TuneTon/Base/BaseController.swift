@@ -16,13 +16,13 @@ class BaseController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+      
     }
     
     
 }
 
-// MARK: - Default Methods for all heirs
+// MARK: - Default Methods for views
 @objc extension BaseController {
     
     func setupViews() {}

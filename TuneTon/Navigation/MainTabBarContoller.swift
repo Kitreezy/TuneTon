@@ -18,12 +18,26 @@ final class MainTabBarContoller: UITabBarController {
         super.viewDidLoad()
      
         configureAppearance()
+        switchTo(tab: .search)
+    }
+    // Switch to development view
+    func switchTo(tab: Tabs) {
+        selectedIndex = tab.rawValue
     }
     
     private func configureAppearance() {
+        
+        if #available(iOS 15, *) {
+            let tabBarAppearance = UITabBarAppearance()
+            tabBarAppearance.configureWithOpaqueBackground()
+            tabBarAppearance.backgroundColor = .clear
+            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+            UITabBar.appearance().standardAppearance = tabBarAppearance
+        }
+        
         tabBar.tintColor = R.Colors.active
         tabBar.barTintColor = R.Colors.inactive
-        tabBar.backgroundColor = R.Colors.background
+        tabBar.backgroundColor = .white
         
         // Overlining
         tabBar.layer.borderColor = R.Colors.separator.cgColor
