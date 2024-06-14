@@ -10,10 +10,8 @@ import UIKit
 final class SearchCellView: UICollectionViewCell {
     static let id = "SearchCellView"
     
-    
     private let albumCoverView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "album")
         return view
     }()
     
@@ -54,9 +52,10 @@ final class SearchCellView: UICollectionViewCell {
         configureAppearance()
     }
     
-    func configure(with trackName: String, artistName: String) {
+    func configure(with trackName: String, artistName: String, albumCoverView: URL) {
         self.trackName.text = trackName
         self.artistName.text = artistName
+        self.albumCoverView.load(url: albumCoverView)
     }
 }
 

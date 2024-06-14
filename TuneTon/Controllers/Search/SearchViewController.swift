@@ -6,19 +6,12 @@
 //
 
 import UIKit
-
-struct TestTrackModel {
-    struct Tracks {
-        let trackName: String
-        let artistName: String
-    }
-    
-    let tracks: [Tracks]
-}
+import Alamofire
 
 class SearchViewController: BaseController {
     
-    private var dataSource: [TestTrackModel] = []
+    var networkService = NetworkService()
+    private var dataSource: [Track] = []
     
     let searchController = UISearchController(searchResultsController: nil)
     
@@ -42,11 +35,7 @@ class SearchViewController: BaseController {
         setupSearchBar()
     }
     
-    private func setupSearchBar() {
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        searchController.searchBar.delegate = self
-    }
+  
 }
 
 extension SearchViewController {
@@ -78,23 +67,7 @@ extension SearchViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        dataSource = [
-            .init(tracks: [ 
-                .init(trackName: "Bloom", artistName: "Wish Sim"),
-                .init(trackName: "High Way", artistName: "Lee Pure"),
-                .init(trackName: "Bloom", artistName: "Wish Sim"),
-                .init(trackName: "High Way", artistName: "Lee Pure"),
-                .init(trackName: "Bloom", artistName: "Wish Sim"),
-                .init(trackName: "High Way", artistName: "Lee Pure"),
-                .init(trackName: "Bloom", artistName: "Wish Sim"),
-                .init(trackName: "High Way", artistName: "Lee Pure"),
-                .init(trackName: "Bloom", artistName: "Wish Sim"),
-                .init(trackName: "High Way", artistName: "Lee Pure"),
-                .init(trackName: "Bloom", artistName: "Wish Sim"),
-                .init(trackName: "High Way", artistName: "Lee Pure"),
-                .init(trackName: "Bad life", artistName: "Some Day")
-            ])
-        ]
+        dataSource = []
         collectionView.reloadData()
     }
 }
@@ -107,16 +80,16 @@ extension SearchViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        dataSource[section].tracks.count
+        dataSource.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCellView.id,
                                                             for: indexPath) as? SearchCellView else { return UICollectionViewCell() }
         
-        let track = dataSource[indexPath.section].tracks[indexPath.row]
+        let track = dataSource[indexPath.row]
         
-        cell.configure(with: track.trackName, artistName: track.artistName)
+        cell.configure(with: track.trackName ?? "", artistName: track.artistName, albumCoverView: track.artworkUrl100 ?? URL(fileURLWithPath: ""))
         return cell
     }
     // Headre mb search
@@ -137,9 +110,25 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
         CGSize(width: collectionView.frame.width, height: 32)
     }
 }
+// MARK: - UISeacrhBar
+extension SearchViewController {
+    private func setupSearchBar() {
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.searchBar.delegate = self
+    }
+}
+
 // MARK: - UISearchBarDelegate
 extension SearchViewController: UISearchBarDelegate {
     func  searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print(searchText)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.networkService.fetchTracks(searchText: searchText) { [weak self] (searchResults) in
+                self?.dataSource = searchResults?.results ?? []
+                self?.collectionView.reloadData()
+            }
+        }
     }
 }

@@ -22,7 +22,7 @@ class BaseController: UIViewController {
     
 }
 
-// MARK: - Default Methods for views
+// MARK: - Default Methods for Controller
 @objc extension BaseController {
     
     func setupViews() {}
